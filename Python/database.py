@@ -22,8 +22,11 @@ session = Session(engine)
 
 
 def add(name):
-    session.add(Request(name=name))
-    session.commit()
+    try:
+        session.add(Request(name=name))
+        session.commit()
+    except Exception as e:
+        print(e)
 
 
 def get_all():
