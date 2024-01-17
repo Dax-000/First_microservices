@@ -1,12 +1,15 @@
 from fastapi import FastAPI
 import uvicorn
 
+from database import add as log_entry
+
 
 app = FastAPI()
 
 
 @app.get('/greet')
 def greet(name: str = None):
+    log_entry(name)
     return f"Привет, {name} от Python!"
 
 
