@@ -85,7 +85,6 @@ func greetHandler(res http.ResponseWriter, req *http.Request) {
 }
 
 func historyHandler(res http.ResponseWriter, req *http.Request) {
-	get_history()
 	data := get_history()
 	res.WriteHeader(200)
 	res.Write(data)
