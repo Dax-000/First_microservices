@@ -1,12 +1,15 @@
 from sqlalchemy import create_engine, select, delete
 from sqlalchemy.orm import mapped_column, declarative_base, Mapped, Session
+from config import *
+import psycopg2
 
 from datetime import datetime
 
 
 date_fmt = '%d-%m-%Y %H:%M:%S.%f'
 
-engine = create_engine("sqlite:///logs.db")  # , echo=True)
+url = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
+engine = create_engine(url)  # , echo=True)
 Base = declarative_base()
 
 
