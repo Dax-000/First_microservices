@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"time"
 
@@ -22,6 +23,7 @@ func main() {
 
 	mux.HandleFunc("/greet", greetHandler)
 	mux.HandleFunc("/greet/history", historyHandler)
+	mux.HandleFunc("/greet/python", pythonHandler)
 
 	s := &http.Server{
 		Addr:    ":8080",
@@ -88,4 +90,18 @@ func historyHandler(res http.ResponseWriter, req *http.Request) {
 	data := get_history()
 	res.WriteHeader(200)
 	res.Write(data)
+}
+
+func pythonHandler(res http.ResponseWriter, req *http.Request) {
+	data := get_greet_py()
+	res.WriteHeader(200)
+	res.Write(data)
+}
+func get_greet_py() []byte {
+	resp, err := http.Get("http://127.0.0.1:8000/greet?name=Go")
+	if err != nil {
+		return []byte("Python сервис не отвечает")
+	}
+	body, _ := io.ReadAll(resp.Body)
+	return body
 }
