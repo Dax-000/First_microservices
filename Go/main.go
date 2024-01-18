@@ -48,10 +48,9 @@ func initDB() {
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println("Table history_go exists")
 }
 
-func add_history() {
+func db_add_history() {
 	_, err := db.Exec("INSERT INTO history_go (date) VALUES ($1)", time.Now().Format("02-01-2006 15:04:05"))
 	if err != nil {
 		panic(err)
@@ -59,7 +58,7 @@ func add_history() {
 	db.Exec("COMMIT")
 }
 
-func get_history() []byte {
+func db_get_history() []byte {
 	logs := make([]Log, 0)
 	rows, err := db.Query("SELECT date FROM history_go")
 	if err != nil {
@@ -83,11 +82,11 @@ func greetHandler(res http.ResponseWriter, req *http.Request) {
 	data := []byte("Привет от Go!")
 	res.WriteHeader(200)
 	res.Write(data)
-	add_history()
+	db_add_history()
 }
 
 func historyHandler(res http.ResponseWriter, req *http.Request) {
-	data := get_history()
+	data := db_get_history()
 	res.WriteHeader(200)
 	res.Write(data)
 }
