@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine, select, delete
 from sqlalchemy.orm import mapped_column, declarative_base, Mapped, Session
 from config import user, password, host, port, dbname
-import psycopg2
 
 from datetime import datetime
 
@@ -14,7 +13,7 @@ Base = declarative_base()
 
 
 class Request(Base):
-    __tablename__ = 'history'
+    __tablename__ = 'history_py'
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, nullable=True)
     name: Mapped[str] = mapped_column(nullable=False, default="noname")
     date: Mapped[str] = mapped_column(default=datetime.now().strftime(date_fmt))
