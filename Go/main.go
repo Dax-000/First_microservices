@@ -13,6 +13,9 @@ import (
 
 var db *sql.DB
 
+const dateFmt string = "02-01-2006 15:04:05"
+const pyRequest string = "http://127.0.0.1:8000/greet?name=Go"
+
 type Log struct {
 	Date string `json:"date"`
 }
@@ -48,10 +51,24 @@ func initDB() {
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("Table history_go created")
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS public.go_requests(request VARCHAR(50), answer VARCHAR(50), date character varying NOT NULL)")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Table go_requests created")
 }
 
 func db_add_history() {
-	_, err := db.Exec("INSERT INTO history_go (date) VALUES ($1)", time.Now().Format("02-01-2006 15:04:05"))
+	_, err := db.Exec("INSERT INTO history_go (date) VALUES ($1)", time.Now().Format(dateFmt))
+	if err != nil {
+		panic(err)
+	}
+	db.Exec("COMMIT")
+}
+
+func db_add_request(request, answer string) {
+	_, err := db.Exec("INSERT INTO go_requests (request, answer, date) VALUES ($1, $2, $3)", request, answer, time.Now().Format(dateFmt))
 	if err != nil {
 		panic(err)
 	}
@@ -95,9 +112,11 @@ func pythonHandler(res http.ResponseWriter, req *http.Request) {
 	data := get_greet_py()
 	res.WriteHeader(200)
 	res.Write(data)
+	db_add_request(pyRequest, string(data))
 }
+
 func get_greet_py() []byte {
-	resp, err := http.Get("http://127.0.0.1:8000/greet?name=Go")
+	resp, err := http.Get(pyRequest)
 	if err != nil {
 		return []byte("Python сервис не отвечает")
 	}
