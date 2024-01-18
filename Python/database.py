@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, select, delete
 from sqlalchemy.orm import mapped_column, declarative_base, Mapped, Session
-from config import *
+from config import user, password, host, port, dbname
 import psycopg2
 
 from datetime import datetime
