@@ -13,7 +13,6 @@ import (
 var db *sql.DB
 
 type Log struct {
-	Name string `json:"name"`
 	Date string `json:"date"`
 }
 
@@ -43,10 +42,15 @@ func initDB() {
 		panic(err)
 	}
 	fmt.Println("The database is connected")
+	_, err = db.Exec("CREATE TABLE IF NOT EXISTS public.history_go(date character varying NOT NULL)")
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("Table history_go exists")
 }
 
 func add_history() {
-	_, err := db.Exec("INSERT INTO history (name, date) VALUES ($1, $2)", "noname", time.Now().Format("02-01-2006 15:04:05"))
+	_, err := db.Exec("INSERT INTO history_go (date) VALUES ($1)", time.Now().Format("02-01-2006 15:04:05"))
 	if err != nil {
 		panic(err)
 	}
@@ -55,14 +59,14 @@ func add_history() {
 
 func get_history() []byte {
 	logs := make([]Log, 0)
-	rows, err := db.Query("SELECT name, date FROM history")
+	rows, err := db.Query("SELECT date FROM history_go")
 	if err != nil {
 		panic(err)
 	}
 
 	for rows.Next() {
 		p := Log{}
-		err := rows.Scan(&p.Name, &p.Date)
+		err := rows.Scan(&p.Date)
 		if err != nil {
 			fmt.Println(err)
 			continue
