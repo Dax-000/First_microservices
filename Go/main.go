@@ -32,7 +32,6 @@ func main() {
 		Addr:    ":8081",
 		Handler: mux,
 	}
-	fmt.Println("ListenAndServe")
 	s.ListenAndServe()
 }
 
@@ -97,7 +96,6 @@ func db_get_history() []byte {
 }
 
 func greetHandler(res http.ResponseWriter, req *http.Request) {
-	fmt.Println("Greet")
 	data := []byte("Привет от Go!")
 	res.WriteHeader(200)
 	res.Write(data)
@@ -105,7 +103,6 @@ func greetHandler(res http.ResponseWriter, req *http.Request) {
 }
 
 func historyHandler(res http.ResponseWriter, req *http.Request) {
-	fmt.Println("History")
 	data := db_get_history()
 	res.WriteHeader(200)
 	res.Write(data)
