@@ -1,13 +1,26 @@
 services:
-  python:
+  service_py:
     container_name: service_py
     build:
       context: ./Python
       dockerfile: Dockerfile
+    expose:
+      - "80"
     ports:
       - "8080:80"
     depends_on:
       - db_postgres
+
+  service_go:
+    container_name: service_go
+    build:
+      context: ./Go
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db_postgres
+      - service_py
 
   db_postgres:
     container_name: db_postgres

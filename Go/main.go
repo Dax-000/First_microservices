@@ -14,7 +14,7 @@ import (
 var db *sql.DB
 
 const dateFmt string = "02-01-2006 15:04:05"
-const pyRequest string = "http://127.0.0.1:8000/greet?name=Go"
+const pyRequest string = "http://service_py:80/greet?name=Go"
 
 type Log struct {
 	Date string `json:"date"`
@@ -29,15 +29,16 @@ func main() {
 	mux.HandleFunc("/greet/python", pythonHandler)
 
 	s := &http.Server{
-		Addr:    ":8080",
+		Addr:    ":8081",
 		Handler: mux,
 	}
+	fmt.Println("ListenAndServe")
 	s.ListenAndServe()
 }
 
 func initDB() {
 	var err error
-	connStr := "postgres://postgres:wertyxar665@localhost/postgres?sslmode=disable" // OKn`t
+	connStr := "postgres://postgres:wertyxar665@db_postgres/postgres?sslmode=disable" // OKn`t
 	db, err = sql.Open("postgres", connStr)
 
 	if err != nil {
@@ -96,6 +97,7 @@ func db_get_history() []byte {
 }
 
 func greetHandler(res http.ResponseWriter, req *http.Request) {
+	fmt.Println("Greet")
 	data := []byte("Привет от Go!")
 	res.WriteHeader(200)
 	res.Write(data)
@@ -103,6 +105,7 @@ func greetHandler(res http.ResponseWriter, req *http.Request) {
 }
 
 func historyHandler(res http.ResponseWriter, req *http.Request) {
+	fmt.Println("History")
 	data := db_get_history()
 	res.WriteHeader(200)
 	res.Write(data)
