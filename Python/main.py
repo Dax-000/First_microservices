@@ -1,5 +1,6 @@
 from fastapi import FastAPI, APIRouter
 import uvicorn
+import psycopg2
 
 from database import add as log_entry
 from database import get_all as get_history
