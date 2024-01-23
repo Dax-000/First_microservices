@@ -84,7 +84,7 @@ func db_add_history() {
 }
 
 func db_add_request(request, answer string) {
-	_, err := db.Exec("INSERT INTO go_requests (request, answer, date) VALUES ($1, $2, $3)", request, answer, time.Now().Format(dateFmt))
+	_, err := db.Exec("INSERT INTO go_requests (request, answer, date) VALUES ($1, $2, $3)", request, answer, time.Now().UTC().Format(dateFmt))
 	if err != nil {
 		panic(err)
 	}

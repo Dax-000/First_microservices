@@ -23,7 +23,7 @@ class Request(Base):
     __tablename__ = 'history_py'
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, nullable=True)
     name: Mapped[str] = mapped_column(nullable=False, default="noname")
-    date: Mapped[str] = mapped_column(default=datetime.now().strftime(date_fmt))
+    date: Mapped[str] = mapped_column(default=datetime.utcnow().strftime(date_fmt))
 
 
 Base.metadata.create_all(engine)

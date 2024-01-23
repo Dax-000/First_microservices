@@ -29,8 +29,8 @@ def test_py_greet_history(browser, logger):
     d_answer = loads(answer)[-1]
     assert d_answer['name'] == name
     answer_time = datetime.strptime(d_answer['date'], date_fmt)
-    time_diff = datetime.now() - answer_time
-    # assert time_diff.seconds < 3 # Время в контейнере различается на 6 часов
+    time_diff = datetime.utcnow() - answer_time
+    assert time_diff.total_seconds() < 20
 
 
 def test_go_greeting(browser, logger):
@@ -47,8 +47,8 @@ def test_go_greet_history(browser, logger):
     answer = go_history.endpoint_greet_history()
     d_answer = loads(answer)[-1]
     answer_time = datetime.strptime(d_answer['date'], date_fmt_go)
-    time_diff = datetime.now() - answer_time
-    # assert time_diff.seconds < 3 # Время в контейнере различается на 5 часов
+    time_diff = datetime.utcnow() - answer_time
+    assert time_diff.total_seconds() < 20
 
 
 def test_go_greet_py(browser, logger):
