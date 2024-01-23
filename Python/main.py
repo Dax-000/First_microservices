@@ -12,7 +12,7 @@ router = APIRouter()
 
 
 @router.get('/greet')
-async def greet(name: str = None):
+async def greet(name: str = noname):
     log_entry(name)
     return f"Привет, {name} от Python!"
 
