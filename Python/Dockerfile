@@ -10,7 +10,7 @@ ENV POSTGRES_DBNAME postgres
 ENV POSTGRES_USER postgres
 ENV POSTGRES_PASSWORD 123456
 
-WORKDIR /usr/src/app
+WORKDIR /src/app
 
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
