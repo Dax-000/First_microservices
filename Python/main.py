@@ -4,7 +4,7 @@ import psycopg2
 
 from database import add as log_entry
 from database import get_all as get_history
-from config import app_workers
+from os import getenv
 
 
 app = FastAPI()
@@ -26,4 +26,4 @@ app.include_router(router)
 
 
 if __name__ == "__main__":
-    uvicorn.run('main:app', host="0.0.0.0", port=80, reload=True, workers=app_workers)
+    uvicorn.run('main:app', host="0.0.0.0", port=80, reload=True, workers=int(getenv('APP_WORKERS')))

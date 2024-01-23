@@ -1,11 +1,18 @@
 from sqlalchemy import create_engine, select, delete
 from sqlalchemy.orm import mapped_column, declarative_base, Mapped, Session
-from config import user, password, host, port, dbname
 
 from datetime import datetime
+from os import getenv
 
 
 date_fmt = '%d-%m-%Y %H:%M:%S.%f'
+
+# конфиги postgresql из docker-compose
+host = getenv('POSTGRES_HOST')
+port = getenv('POSTGRES_PORT')
+dbname = getenv('POSTGRES_DBNAME')
+user = getenv('POSTGRES_USER')
+password = getenv('POSTGRES_PASSWORD')
 
 url = f"postgresql://{user}:{password}@{host}:{port}/{dbname}"
 engine = create_engine(url)  # , echo=True)
