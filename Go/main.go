@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 	"time"
 
 	_ "github.com/lib/pq"
@@ -35,10 +36,25 @@ func main() {
 	s.ListenAndServe()
 }
 
+func getConnStr() string {
+	var connStr string = ""
+	var envs = [5]string{"POSTGRES_USER", "POSTGRES_PASSWORD", "POSTGRES_HOST", "POSTGRES_PORT", "POSTGRES_DBNAME"}
+	var connStrKeys = [5]string{"user=", " password=", " host=", " port=", " dbname="}
+
+	for i, key := range connStrKeys {
+		env, exist := os.LookupEnv(envs[i])
+		if !exist {
+			fmt.Printf("%s %s %s", "ENV", envs[i], "not exists")
+		} else {
+			connStr += key + env
+		}
+	}
+	return connStr + " sslmode=disable"
+}
+
 func initDB() {
 	var err error
-	connStr := "postgres://postgres:wertyxar665@db_postgres/postgres?sslmode=disable" // OKn`t
-	db, err = sql.Open("postgres", connStr)
+	db, err = sql.Open("postgres", getConnStr())
 
 	if err != nil {
 		panic(err)
